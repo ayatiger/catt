@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "736996621445",
+    "firebase_url": "https://helppeople-b46b7-default-rtdb.firebaseio.com",
+    "project_id": "helppeople-b46b7",
+    "storage_bucket": "helppeople-b46b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736996621445:android:6811613a488611618dbdec",
+        "android_client_info": {
+          "package_name": "com.example.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvm9wUbmz7vWmSs2EIMo54x3Wuylssybk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
