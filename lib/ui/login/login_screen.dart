@@ -26,7 +26,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNavigator {
   String name = '';
   String type = '';
   LoginViewModel viewModel = LoginViewModel();
-
+  TextEditingController emailController = TextEditingController(text: "admin@admin.com");
+  TextEditingController passwordController = TextEditingController(text: "123456789");
   @override
   void initState() {
     // TODO: implement initState
@@ -43,8 +44,7 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNavigator {
           Container(
             color: Colors.white,
           ),
-          Image.asset('assets/images/main_background.png',
-              fit: BoxFit.fill, width: double.infinity),
+          Image.asset('assets/images/main_background.png', fit: BoxFit.fill, width: double.infinity),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
@@ -55,89 +55,64 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNavigator {
               centerTitle: true,
               backgroundColor: Colors.transparent,
             ),
-            body:
-            Form(
+            body: Form(
               key: formkey,
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        onChanged: (text) {
-                          email = text;
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(labelText: 'Email'),
+                      onChanged: (text) {
+                        email = text;
+                      },
+                      //initialValue: "aya555@gmail.com",
+                      validator: (text) {
+                        bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(text!);
+                        if (text == null || text.trim().isEmpty) {
+                          return 'Please enter email';
+                        }
+                        if (!emailValid) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      decoration: const InputDecoration(labelText: 'Password'),
+                      onChanged: (text) {
+                        password = text;
+                      },
+                      //initialValue: "123456789",
+                      validator: (text) {
+                        if (text == null || text.trim().isEmpty) {
+                          return 'Please enter password';
+                        }
+                        if (text.length < 6) {
+                          return 'Password must be at least 6 characters.';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    ElevatedButton(
+                        onPressed: () {
+                          validateForm();
                         },
-                        validator: (text) {
-                          bool emailValid = RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(text!);
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter email';
-                          }
-                          if (!emailValid) {
-                            return 'Please enter a valid email';
-                          }
-                          return null;
+                        child: const Text('Login')),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(RegisterScreen.routeName);
                         },
-                      ),
-                      // TextFormField(
-                      //   decoration: const InputDecoration(labelText: 'Name'),
-                      //   onChanged: (text) {
-                      //     name = text;
-                      //   },
-                      //   validator: (text) {
-                      //     if (text == null || text.trim().isEmpty) {
-                      //       return 'Please enter name';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Password'),
-                        onChanged: (text) {
-                          password = text;
-                        },
-                        validator: (text) {
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter password';
-                          }
-                          if (text.length < 6) {
-                            return 'Password must be at least 6 characters.';
-                          }
-                          return null;
-                        },
-                      ),
-                      // TextFormField(
-                      //   decoration: const InputDecoration(labelText: 'Type'),
-                      //   onChanged: (text) {
-                      //     type = text;
-                      //   },
-                      //   validator: (text) {
-                      //     if (text == null || text.trim().isEmpty) {
-                      //       return 'Please enter your type (doctor / patient)';
-                      //     }
-                      //     return null;
-                      //   },
-                      // ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      ElevatedButton(
-                          onPressed: () {
-                            validateForm();
-                          },
-                          child: const Text('Login')),
-                      TextButton(
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(RegisterScreen.routeName);
-                          },
-                          child: const Text('Create account')),
-                    ],
-                  ),
+                        child: const Text('Create account')),
+                  ],
                 ),
               ),
             ),
@@ -148,13 +123,17 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNavigator {
   }
 
   void validateForm() {
-    if (formkey.currentState?.validate() == true) {
-      CacheHelper.saveData(key: 'email', value: email);
-      // CacheHelper.saveData(key: 'type', value: type);
-      // CacheHelper.saveData(key: 'name', value: name);
-      viewModel.loginFirebaseAuth(email, password);
-      CacheHelper.saveData(key:'isLogout',value:false);
-    }
+    //if (formkey.currentState?.validate() == true) {
+    CacheHelper.saveData(key: 'email', value: emailController.text);
+    // CacheHelper.saveData(key: 'type', value: type);
+    // CacheHelper.saveData(key: 'name', value: name);
+    // email = "admin@admin.com";
+    // password = "123456789";
+
+    viewModel.loginFirebaseAuth(emailController.text, passwordController.text);
+
+    CacheHelper.saveData(key: 'isLogout', value: false);
+    // }
   }
 
   @override

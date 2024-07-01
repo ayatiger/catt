@@ -19,8 +19,7 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen>
-    implements RegisterNavigator {
+class _RegisterScreenState extends State<RegisterScreen> implements RegisterNavigator {
   String firstName = '';
 
   String lastName = '';
@@ -32,8 +31,8 @@ class _RegisterScreenState extends State<RegisterScreen>
   dynamic password = '';
   dynamic type = '';
   dynamic disease = '';
-  bool isDoc=true;
-  String userType='';
+  bool isDoc = true;
+  String userType = '';
   dynamic currentValue1;
   var formKey = GlobalKey<FormState>();
   RegisterViewModel viewModel = RegisterViewModel();
@@ -54,8 +53,7 @@ class _RegisterScreenState extends State<RegisterScreen>
           Container(
             color: Colors.white,
           ),
-          Image.asset('assets/images/main_background.png',
-              fit: BoxFit.fill, width: double.infinity),
+          Image.asset('assets/images/main_background.png', fit: BoxFit.fill, width: double.infinity),
           Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
@@ -66,191 +64,198 @@ class _RegisterScreenState extends State<RegisterScreen>
               centerTitle: true,
               backgroundColor: Colors.transparent,
             ),
-            body: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextFormField(
-                        style: const TextStyle(color: Colors.white),
-                        cursorColor: Colors.white,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.white),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.red),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(color: Colors.white),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: const BorderSide(
-                                color: Color.fromRGBO(217, 217, 217, 1)),
-                          ),
-                          labelStyle: const TextStyle(color: Colors.white),
-                          labelText: 'First Name',
-                          border: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white24,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextFormField(
+                            style: const TextStyle(color: Colors.black),
+                            cursorColor: Colors.black,
+                            decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.black),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.red),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(color: Colors.black),
+                              ),
+                              focusedErrorBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: const BorderSide(color: Color.fromRGBO(217, 217, 217, 1)),
+                              ),
+                              labelStyle: const TextStyle(color: Colors.black),
+                              labelText: 'First Name',
+                              border: const UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
+                            onChanged: (text) {
+                              firstName = text;
+                            },
+                            validator: (text) {
+                              if (text == null || text.trim().isEmpty) {
+                                return 'Please enter first name';
+                              }
+                              return null;
+                            },
                           ),
-                        ),
-                        onChanged: (text) {
-                          firstName = text;
-                        },
-                        validator: (text) {
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter first name';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Last Name',
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'Last Name',
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              errorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.red),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              focusedErrorBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Color.fromRGBO(217, 217, 217, 1)),
+                              ),
+                              labelStyle: TextStyle(color: Colors.black),
+                            ),
+                            onChanged: (text) {
+                              lastName = text;
+                            },
+                            validator: (text) {
+                              if (text == null || text.trim().isEmpty) {
+                                return 'Please enter last name';
+                              }
+                              return null;
+                            },
                           ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              labelText: 'User Name',
+                              labelStyle: TextStyle(color: Colors.black),
+                            ),
+                            onChanged: (text) {
+                              userName = text;
+                            },
+                            validator: (text) {
+                              if (text == null || text.trim().isEmpty) {
+                                return 'Please enter user name';
+                              }
+                              return null;
+                            },
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.white),
+                          TextFormField(
+                            decoration: const InputDecoration(labelText: 'Email'),
+                            onChanged: (text) {
+                              email = text;
+                            },
+                            validator: (text) {
+                              bool emailValid =
+                                  RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                      .hasMatch(text!);
+                              if (text == null || text.trim().isEmpty) {
+                                return 'Please enter email';
+                              }
+                              if (!emailValid) {
+                                return 'Please enter a valid email';
+                              }
+                              return null;
+                            },
                           ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromRGBO(217, 217, 217, 1)),
+                          TextFormField(
+                            decoration: const InputDecoration(labelText: 'Password'),
+                            onChanged: (text) {
+                              password = text;
+                            },
+                            validator: (text) {
+                              if (text == null || text.trim().isEmpty) {
+                                return 'Please enter password';
+                              }
+                              if (text.length < 6) {
+                                return 'Password must be at least 6 chars.';
+                              }
+                              return null;
+                            },
                           ),
-                          labelStyle: TextStyle(color: Colors.white),
-                        ),
-                        onChanged: (text) {
-                          lastName = text;
-                        },
-                        validator: (text) {
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter last name';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'User Name',
-                          labelStyle: TextStyle(color: Colors.white),
-                        ),
-                        onChanged: (text) {
-                          userName = text;
-                        },
-                        validator: (text) {
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter user name';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Email'),
-                        onChanged: (text) {
-                          email = text;
-                        },
-                        validator: (text) {
-                          bool emailValid = RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(text!);
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter email';
-                          }
-                          if (!emailValid) {
-                            return 'Please enter a valid email';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        decoration:
-                        const InputDecoration(labelText: 'Password'),
-                        onChanged: (text) {
-                          password = text;
-                        },
-                        validator: (text) {
-                          if (text == null || text.trim().isEmpty) {
-                            return 'Please enter password';
-                          }
-                          if (text.length < 6) {
-                            return 'Password must be at least 6 chars.';
-                          }
-                          return null;
-                        },
-                      ),
-                      DropdownButton<String>(
-                        value: currentValue1,
-                        onChanged: (newValue) {
-                          setState(() {
-                            currentValue1 = newValue!;
-                            type = newValue;
-                          });
-                        },
-                        items: const [
-                          DropdownMenuItem<String>(
-                            value: 'doctor',
-                            child: Text('Doctor'),
+                          // DropdownButton<String>(
+                          //   value: currentValue1,
+                          //   onChanged: (newValue) {
+                          //     setState(() {
+                          //       currentValue1 = newValue!;
+                          //       type = newValue;
+                          //     });
+                          //   },
+                          //   items: const [
+                          //     DropdownMenuItem<String>(
+                          //       value: 'doctor',
+                          //       child: Text('Doctor'),
+                          //     ),
+                          //     DropdownMenuItem<String>(
+                          //       value: 'patient',
+                          //       child: Text('Patient'),
+                          //     ),
+                          //   ],
+                          // ),
+                          TFF(
+                            action: TextInputAction.send,
+                            type: TextInputType.text,
+                            isPrefix: false,
+                            underlineBorder: true,
+                            label: "Disease",
+                            hint: "enter your disease if you are a patient",
+                            isEnabledBorder: true,
+                            onChanged: (value) {
+                              disease = value;
+                            },
+                            borderColor: Colors.grey,
+                            labelColor: Colors.grey,
+                            validator: (text) {
+                              if (currentValue1 == "patient") {
+                                isDoc = false;
+                                userType = 'patient';
+                                if (text == null || text.trim().isEmpty) {
+                                  return 'Please enter last name';
+                                }
+                              } else {
+                                userType = 'Doctor';
+                                isDoc = true;
+                              }
+                              return null;
+                            },
                           ),
-                          DropdownMenuItem<String>(
-                            value: 'patient',
-                            child: Text('Patient'),
+                          const SizedBox(
+                            height: 15,
                           ),
+                          ElevatedButton(
+                            onPressed: () {
+                              validateForm();
+                              // if (currentValue1 == null) {
+                              //   buildSnackBar('select your type first', context, 3);
+                              // } else {
+
+                              // }
+                            },
+                            child: const Text('Create Account'),
+                          )
                         ],
                       ),
-                      TFF(
-                        action: TextInputAction.send,
-                        type: TextInputType.text,
-                        isPrefix: false,
-                        underlineBorder: true,
-                        label: "Disease",
-                        hint: "enter your disease if you are a patient",
-                        isEnabledBorder: true,
-                        onChanged: (value){
-                          disease = value;
-                        },
-                        borderColor: Colors.grey,
-                        labelColor: Colors.grey,
-                        validator: (text) {
-                          if(currentValue1 == "patient"){
-                            isDoc=false;
-                            userType='patient';
-                            if (text == null || text.trim().isEmpty) {
-                              return 'Please enter last name';
-                            }
-                          }
-                          else{
-                            userType='Doctor';
-                            isDoc=true;
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          if(currentValue1 == null){
-                             buildSnackBar('select your type first', context, 3);
-                          }
-                          else{validateForm();}
-                        },
-                        child: const Text('Create Account'),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -265,13 +270,20 @@ class _RegisterScreenState extends State<RegisterScreen>
     if (formKey.currentState?.validate() == true) {
       CacheHelper.saveData(key: 'email', value: email);
       CacheHelper.saveData(key: 'name', value: firstName + " " + lastName);
-      CacheHelper.saveData(key: 'type', value: type);
+      // CacheHelper.saveData(key: 'type', value: type);
       CacheHelper.saveData(key: 'disease', value: disease);
-      CacheHelper.saveData(key:'isLogout',value:false);
+      CacheHelper.saveData(key: 'isLogout', value: false);
       viewModel.registerFirebaseAuth(
-          email, password, firstName, lastName, userName,isDoc,userType);
+        email,
+        password,
+        firstName,
+        lastName,
+        userName,
+        isDoc,
+        userType,
+        disease,
+      );
     }
-
   }
 
   @override
@@ -300,8 +312,7 @@ class _RegisterScreenState extends State<RegisterScreen>
     userProvider.user = user;
     // TODO: implement navigateToHome
     Timer(const Duration(seconds: 3), () {
-      Navigator.of(context)
-          .pushReplacement(CustomPageRoute(child: const AppLayout()));
+      Navigator.of(context).pushReplacement(CustomPageRoute(child: const AppLayout()));
     });
   }
 }

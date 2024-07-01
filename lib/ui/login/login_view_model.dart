@@ -1,8 +1,11 @@
 import 'package:chat/database/database_utils.dart';
 import 'package:chat/firebase_errors.dart';
+import 'package:chat/model/my_user.dart';
 import 'package:chat/ui/login/login_navigator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+
+MyUser? userObj;
 
 class LoginViewModel extends ChangeNotifier {
   late LoginNavigator navigator;
@@ -17,7 +20,7 @@ class LoginViewModel extends ChangeNotifier {
       );
 
       // Retrieve user data from your database
-      var userObj = await DatabaseUtils.getUser(result.user?.uid ?? '');
+      userObj = await DatabaseUtils.getUser(result.user?.uid ?? '');
 
       // Check if user data was successfully retrieved
       if (userObj == null) {
@@ -31,11 +34,12 @@ class LoginViewModel extends ChangeNotifier {
         // Show success message
         navigator.showMessage('Login Successfully');
         // Navigate to home screen with the user object
-        navigator.navigateToHome(userObj);
+        navigator.navigateToHome(userObj!);
       }
     } on FirebaseAuthException catch (e) {
       // Hide loading indicator
       navigator.hideLoading();
+      print("ee ${e.code.toString()}");
 
       // Handle specific FirebaseAuthException error codes
       if (e.code == FirebaseErrors.userNotFound) {
@@ -44,7 +48,7 @@ class LoginViewModel extends ChangeNotifier {
         navigator.showMessage('Wrong password provided for that user.');
       } else {
         // Handle other error codes or show a generic error message
-        navigator.showMessage('An error occurred. Please try again.');
+        navigator.showMessage('${e.code.toString()}');
       }
     } catch (e) {
       // Hide loading indicator
@@ -53,5 +57,4 @@ class LoginViewModel extends ChangeNotifier {
       navigator.showMessage('An unexpected error occurred. Please try again.');
     }
   }
-
 }

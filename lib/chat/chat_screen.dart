@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../model/message.dart';
 import 'package:intl/intl.dart';
+
 class ChatScreen extends StatefulWidget {
   final String chatId;
   final String recipientId;
@@ -49,7 +50,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Stream<List<Message>> _getMessages() {
     return _messagesRef.orderBy('timestamp').snapshots().map(
-            (snapshot) => snapshot.docs.map((doc) => Message.fromDocument(doc)).toList());
+          (snapshot) => snapshot.docs.map((doc) => Message.fromDocument(doc)).toList(),
+        );
   }
 
   @override

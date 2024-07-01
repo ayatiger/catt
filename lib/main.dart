@@ -4,6 +4,7 @@ import 'package:chat/ui/add_room/add_room.dart';
 import 'package:chat/ui/home/home_screen.dart';
 import 'package:chat/ui/login/login_screen.dart';
 import 'package:chat/ui/register/register_screen.dart';
+import 'package:chat/ui/room_screen/room_screen.dart';
 import 'package:chat/view/bottom_nav/bottom_nav_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,18 +18,15 @@ import 'network/local/bloc_observer.dart';
 import 'network/local/cache_helper.dart';
 
 FirebaseMessaging messaging = FirebaseMessaging.instance;
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void printToken() async {
   String? token = await messaging.getToken();
   print('Token : $token');
 }
 
-AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'Cloud messaging', 'Upcoming Message',
-    description: 'Chat app used this channel for user',
-    importance: Importance.high);
+AndroidNotificationChannel channel = const AndroidNotificationChannel('Cloud messaging', 'Upcoming Message',
+    description: 'Chat app used this channel for user', importance: Importance.high);
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // If you're going to use other Firebase services in the background, such as Firestore,
@@ -88,8 +86,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -97,8 +94,7 @@ void main() async {
     sound: true,
   );
 
-  runApp(ChangeNotifierProvider(
-      create: (context) => UserProvider(), child: const MyApp()));
+  runApp(ChangeNotifierProvider(create: (context) => UserProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -149,22 +145,24 @@ class _MyAppState extends State<MyApp> {
     return BlocProvider(
       create: (BuildContext context) => AppCubit(),
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: {
-          RegisterScreen.routeName: (context) => RegisterScreen(),
-          LoginScreen.routeName: (context) => LoginScreen(),
-          HomeScreen.routeName: (context) => const HomeScreen(),
-          // HomeScreen2.routeName: (context) => const HomeScreen2(),
-          AddRoom.routeName: (context) => AddRoom(),
-          // ChatScreen.routeName: (context) => ChatScreen(),
-        },
-        home: CacheHelper.getData(key:'isLogout') == true
-            ? LoginScreen()
-            : const AppLayout(),
-        // initialRoute: userProvider.firebaseUser == null
-        //     ? LoginScreen.routeName
-        //     : AppLayout(),
-      ),
+          debugShowCheckedModeBanner: false,
+          routes: {
+            RegisterScreen.routeName: (context) => RegisterScreen(),
+            LoginScreen.routeName: (context) => LoginScreen(),
+            HomeScreen.routeName: (context) => const HomeScreen(),
+            // RoomScreen.routeName: (context) => RoomScreen(),
+            AddRoom.routeName: (context) => AddRoom(),
+            // ChatScreen.routeName: (context) => ChatScreen(),
+          },
+          home: LoginScreen()
+
+          //  CacheHelper.getData(key:'isLogout') == true
+          //     ? LoginScreen()
+          // r    : const AppLayout(),
+          // initialRoute: userProvider.firebaseUser == null
+          //     ? LoginScreen.routeName
+          //     : AppLayout(),
+          ),
     );
   }
 }

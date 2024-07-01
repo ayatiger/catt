@@ -11,25 +11,37 @@ import '../../firebase_errors.dart';
 class RegisterViewModel extends ChangeNotifier {
   late RegisterNavigator navigator;
 
-  void registerFirebaseAuth(String email, String password, String firstName,
-      String lastName, String userName, bool isDoc,String userType) async {
+  void registerFirebaseAuth(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String userName,
+    bool isDoc,
+    String userType,
+    String disease,
+  ) async {
     navigator.showLoading();
-    log("userrrtype:"+userType);
-    log("isDoc:"+isDoc.toString());
+    log("userrrtype:" + userType);
+    log("isDoc:" + isDoc.toString());
     try {
       final result = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
       var user = MyUser(
-          id: result.user?.uid ?? '',
-          firstName: firstName,
-          lastName: lastName,
-          userName: userName,
-          email: email,
+        id: result.user?.uid ?? '',
+        firstName: firstName,
+        lastName: lastName,
+        userName: userName,
+        imageUrl: "assets/images/group.png",
+        email: email,
         isDoc: isDoc,
-        userType: userType,
-
+        userType: "patient",
+        address: "0",
+        rate: "0",
+        countRate: "0",
+        specialization: disease,
       );
       var dataUser = await DatabaseUtils.regesterUser(user);
       // save data

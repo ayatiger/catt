@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:chat/model/my_user.dart';
+import 'package:chat/ui/login/login_view_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,12 +30,12 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   File? image;
 
   File? myFile;
-  MyUser?_user;
-  void initState()
-  {
+  MyUser? _user;
+  void initState() {
     super.initState();
     loadImage();
   }
+
   String? imagePath;
 
   Future pickImage(ImageSource source, BuildContext context) async {
@@ -47,9 +49,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         imagePath = savedImagePath;
         CacheHelper.saveData(key: 'image_path', value: savedImagePath);
       });
-    } on PlatformException catch (e) {
-
-    }
+    } on PlatformException catch (e) {}
   }
 
   Future<String> saveImage(String imagePath) async {
@@ -59,6 +59,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     await File(imagePath).copy(savedImagePath);
     return savedImagePath;
   }
+
   void buildCameraDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -103,6 +104,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       ),
     );
   }
+
   void loadImage() {
     final savedImagePath = CacheHelper.getData(key: 'image_path');
     if (savedImagePath != null) {
@@ -112,6 +114,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       });
     }
   }
+
+  User? firebaseUser = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,110 +148,122 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                if (image != null)
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: SizedBox(
-                                      width: 120,
-                                      height: 120,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(2.2),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: ClipOval(
-                                            child: Image.file(
-                                              image!,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                else
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: SizedBox(
-                                      width: 120,
-                                      height: 120,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(2.2),
-                                        child: Container(
-                                          height: 120,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Color.fromRGBO(
-                                                0, 0, 0, 0.2),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                const SizedBox(width: 20),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: InkWell(
-                                    onTap: () {
-                                      buildCameraDialog(context);
-                                    },
-                                    child: Text(
-                                      'Change Photo',
-                                      style: mainTextStyle(
-                                        context,
-                                        color: black,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  Provider.of<UserProvider>(context, listen: false).user!.userName.toString(),
+                            if (userObj!.userType.toString() == "Doctor")
+                              Image.asset("${userObj!.imageUrl.toString()}"),
 
-                                  style: mainTextStyle(context),
-                                ),
-                                const Spacer(),
-                                Text(
-                                  Provider.of<UserProvider>(context, listen: false).user!.userType.toString(),
+                            Text("${userObj!.firstName.toString()}"),
+                            Text("${userObj!.lastName.toString()}"),
+                            Text("${userObj!.email.toString()}"),
+                            Text("${userObj!.userType.toString()}"),
+                            if (userObj!.userType.toString() == "Doctor") Text("${userObj!.rate.toString()}"),
+                            if (userObj!.userType.toString() == "Doctor") Text("${userObj!.address.toString()}"),
 
-                                  // CacheHelper.getData(key: 'type') ?? 'doctor',
-                                  style: mainTextStyle(context,
-                                      color: defaultColor),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              CacheHelper.getData(key: 'email') ??
-                                  'aya@gmail.com',
-                              style: mainTextStyle(context),
-                            ),
-                            const SizedBox(height: 20),
+                            Text("${userObj!.specialization.toString()}"),
+
+                            // Text("${userObj!.firstName.toString()}"),
+
+                            // Text("${firebaseUser!.displayName.toString()}"),
+
+                            // Row(
+                            //   children: [
+                            //     // if (image != null)
+                            //     //   Align(
+                            //     //     alignment: Alignment.center,
+                            //     //     child: SizedBox(
+                            //     //       width: 120,
+                            //     //       height: 120,
+                            //     //       child: Padding(
+                            //     //         padding: const EdgeInsets.all(2.2),
+                            //     //         child: Container(
+                            //     //           decoration: const BoxDecoration(
+                            //     //             shape: BoxShape.circle,
+                            //     //           ),
+                            //     //           child: ClipOval(
+                            //     //             child: Image.file(
+                            //     //               image!,
+                            //     //               fit: BoxFit.cover,
+                            //     //             ),
+                            //     //           ),
+                            //     //         ),
+                            //     //       ),
+                            //     //     ),
+                            //     //   )
+                            //     // else
+                            //     //   Align(
+                            //     //     alignment: Alignment.center,
+                            //     //     child: SizedBox(
+                            //     //       width: 120,
+                            //     //       height: 120,
+                            //     //       child: Padding(
+                            //     //         padding: const EdgeInsets.all(2.2),
+                            //     //         child: Container(
+                            //     //           height: 120,
+                            //     //           decoration: const BoxDecoration(
+                            //     //             shape: BoxShape.circle,
+                            //     //             color: Color.fromRGBO(0, 0, 0, 0.2),
+                            //     //           ),
+                            //     //         ),
+                            //     //       ),
+                            //     //     ),
+                            //     //   ),
+                            //     // const SizedBox(width: 20),
+
+                            //     // Align(
+                            //     //   alignment: Alignment.center,
+                            //     //   child: InkWell(
+                            //     //     onTap: () {
+                            //     //       buildCameraDialog(context);
+                            //     //     },
+                            //     //     child: Text(
+                            //     //       'Change Photo',
+                            //     //       style: mainTextStyle(
+                            //     //         context,
+                            //     //         color: black,
+                            //     //       ),
+                            //     //       textAlign: TextAlign.center,
+                            //     //     ),
+                            //     //   ),
+                            //     // ),
+                            //   ],
+                            // ),
+
+                            // const SizedBox(height: 20),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Text(
+                            //       Provider.of<UserProvider>(context, listen: false).user!.userName.toString(),
+                            //       style: mainTextStyle(context),
+                            //     ),
+                            //     const Spacer(),
+                            //     Text(
+                            //       Provider.of<UserProvider>(context, listen: false).user!.userType.toString(),
+                            //       style: mainTextStyle(context, color: defaultColor),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const SizedBox(height: 20),
+                            // Text(
+                            //   CacheHelper.getData(key: 'email') ?? 'aya@gmail.com',
+                            //   style: mainTextStyle(context),
+                            // ),
+                            // const SizedBox(height: 20),
                           ],
                         ),
                       ),
                     ),
                     //CacheHelper.getData(key: 'disease') == "patient"? const SizedBox(height: 30):Text(''),
-                    Provider.of<UserProvider>(context, listen: false).user!.userType.toString()=='Doctor' ?
-                    Text(
-                      '',
-                      style: mainTextStyle(context),
-                    ):
-                    Text(
-                      CacheHelper.getData(key: 'disease') ??
-                          '',
-                      style: mainTextStyle(context),
-                    ),
+                    // Provider.of<UserProvider>(context, listen: false).user!.userType.toString() == 'Doctor'
+                    //     ? Text(
+                    //         '',
+                    //         style: mainTextStyle(context),
+                    //       )
+                    //     : Text(
+                    //         CacheHelper.getData(key: 'disease') ?? '',
+                    //         style: mainTextStyle(context),
+                    //       ),
+
                     const SizedBox(height: 30),
                     // Text(CacheHelper.getData(key: 'type')),
                     // CacheHelper.getData(key: 'type')=='patient'?TFF(
@@ -266,7 +282,8 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                           CustomPageRoute(
                             child: LoginScreen(),
                           ),
-                        );CacheHelper.saveData(key:'isLogout',value:true);
+                        );
+                        CacheHelper.saveData(key: 'isLogout', value: true);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: defaultColor,

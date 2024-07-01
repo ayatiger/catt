@@ -9,7 +9,11 @@ class MyUser {
   String email;
   bool isDoc;
   String userType;
-
+  String imageUrl;
+  String rate;
+  String countRate;
+  String address;
+  String specialization;
   MyUser({
     required this.id,
     required this.firstName,
@@ -17,19 +21,29 @@ class MyUser {
     required this.userName,
     required this.email,
     required this.isDoc,
+    required this.imageUrl,
     required this.userType,
+    required this.rate,
+    required this.countRate,
+    required this.address,
+    required this.specialization,
   });
 
   MyUser.fromJson(Map<String, dynamic> json)
       : this(
-    id: json['id'] as String,
-    firstName: json['first_name'] as String,
-    lastName: json['last_name'] as String,
-    userName: json['user_name'] as String,
-    email: json['email'] as String,
-    isDoc: json['IsDoc'] as bool, // Removed extra colon
-    userType: json['userType'] as String,
-  );
+          id: json['id'] as String,
+          firstName: json['first_name'] as String,
+          lastName: json['last_name'] as String,
+          userName: json['user_name'] as String,
+          imageUrl: json['image_url'] as String,
+          email: json['email'] as String,
+          isDoc: json['IsDoc'] as bool, // Removed extra colon
+          userType: json['userType'] as String,
+          rate: json['rate'].toString() ?? "",
+          countRate: json['count_rate'].toString() ?? "",
+          address: json['address'] ?? "",
+          specialization: json['specialization'] ?? "",
+        );
 
   Map<String, dynamic> toJson() {
     return {
@@ -39,12 +53,16 @@ class MyUser {
       'user_name': userName,
       'email': email,
       'IsDoc': isDoc,
-      'userType':userType,
+      'userType': userType,
+      'rate': rate,
+      'count_rate': countRate,
+      'address': address,
+      'specialization': specialization,
+      'imageUrl': imageUrl,
     };
   }
 
-
-  factory MyUser.fromDocument(DocumentSnapshot doc) {
+  factory MyUser.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
     return MyUser(
       id: doc['id'],
       firstName: doc['first_name'],
@@ -52,13 +70,21 @@ class MyUser {
       email: doc['email'],
       userName: doc['user_name'],
       isDoc: doc['IsDoc'],
+      imageUrl: doc['image_url'],
       userType: doc['userType'],
+      rate: doc['rate'] == "" ? "0" : doc['rate'],
+      countRate: (doc.data()?.containsKey("count_rate") ?? false) ? doc['count_rate'] : "0",
+      address: (doc.data()?.containsKey("address") ?? false) ? doc['address'] : "No Address",
+      specialization:
+          (doc.data()?.containsKey("specialization") ?? false) ? doc['specialization'] : "No Specialization",
     );
   }
 
-
-
+//(doc['rate'].toString() == "") ? '0' : doc['userType']
+  //doc['address'] ??
+  //doc['specialization' ??]
 }
+
 class Doctor {
   final String name;
   final double rate;
@@ -73,8 +99,6 @@ class Doctor {
     required this.imageUrl,
     required this.specialization,
   });
-
-
 
   factory Doctor.fromMap(Map<String, dynamic> data) {
     return Doctor(

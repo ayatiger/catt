@@ -1,10 +1,16 @@
 import 'package:chat/constants/components.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:lottie/lottie.dart';
 
 class ReviewScreen extends StatefulWidget {
-  const ReviewScreen({super.key});
+  final docId;
+
+  const ReviewScreen({
+    super.key,
+    required this.docId,
+  });
 
   @override
   State<ReviewScreen> createState() => _ReviewScreenState();
@@ -13,18 +19,30 @@ class ReviewScreen extends StatefulWidget {
 class _ReviewScreenState extends State<ReviewScreen> {
   TextEditingController reviewController = TextEditingController();
   double rating = 0;
-  void onSubmitReview() {
+  void onSubmitReview() async {
     int rating = this.rating.toInt();
-    if(rating > 0){
+    if (rating > 0) {
+      
+
+      final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+      DocumentSnapshot<Map<String, dynamic>> doc =
+          await _firestore.collection("users").doc(widget.docId.toString()).get();
+
+      // print(doc["rate"] + rating);
+      // print(doc["count_rate"] + 1);
+      _firestore.collection("users").doc(widget.docId.toString()).update({
+        "rate": (double.parse(doc["rate"]) + rating).toString(),
+        "count_rate": (int.parse(doc["count_rate"]) + 1).toString(),
+      });
+
       Navigator.pop(context);
-    }
-    else{
+    } else {
       buildSnackBar('add your rate first', context, 3);
     }
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -74,7 +92,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                       backgroundColor: Colors.white, // Background color
                     ),
                     onPressed: onSubmitReview,
-                    child: Text('add your review',style: mainTextStyle(context),),
+                    child: Text(
+                      'add your review',
+                      style: mainTextStyle(context),
+                    ),
                   ),
                 ),
               ),

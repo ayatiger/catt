@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat/constants/components.dart';
 import 'package:chat/constants/transitions.dart';
 import 'package:chat/ui/home/review_screen.dart';
+import 'package:chat/ui/room_screen/room_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,6 @@ import '../../chat/doctor_chat_list_screen.dart';
 import '../../constants/colors.dart';
 import '../../model/my_user.dart';
 import '../../provider/user_provider.dart';
-
-
-
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = 'home';
@@ -128,8 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-
-
 class HomeScreenContent extends StatefulWidget {
   HomeScreenContent({Key? key}) : super(key: key);
 
@@ -138,133 +134,147 @@ class HomeScreenContent extends StatefulWidget {
 }
 
 class _HomeScreenContentState extends State<HomeScreenContent> {
-
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  Map<String,Map<String,dynamic>> doctorsMap={
-    'Hanafy':{
-      'name': 'Dr. Mahmood Hanafy',
-      'rate': 4.5,
-      'address': '123 Main St, City',
-      'imageUrl': 'assets/images/hanafy.jpg',
-      'specialization': 'Audiologist',},
-    'Ahmed':{
-      'name': 'Dr. Hadeer Ahmed',
-      'rate': 4.8,
-      'address': '456 Elm St, Town',
-      'imageUrl': 'assets/images/hadeer.jpg',
-      'specialization': 'Allergist',
-    },
-    'Mandor':{
-      'name': 'Dr. Mohamed Mandor',
-      'rate': 4.3,
-      'address': '789 Oak St, Village',
-      'imageUrl': 'assets/images/mondor.jpg',
-      'specialization': 'Andrologist',
-    },
-    'Said':{
-      'name': 'Dr. Mohamed Said',
-      'rate': 4.7,
-      'address': '101 Pine St, Town',
-      'imageUrl': 'assets/images/mohamed said.jpg',
-      'specialization': 'Anesthesiologist',
-    },
-    'Tantawy':{
-      'name': 'Dr. Eman Tantawy',
-      'rate': 4.6,
-      'address': '234 Cedar St, City',
-      'imageUrl': 'assets/images/eman.jpg',
-      'specialization': 'Cardiologist',
-    },
-    'Hussein':{
-      'name': 'Dr. Mohamed Hussein',
-      'rate': 4.9,
-      'address': '567 Maple St, Village',
-      'imageUrl': 'assets/images/hussien.jpg',
-      'specialization': 'Neurologist',
-    },
-    'Lotfy':{
-      'name': 'Dr. Ahmed Lotfy',
-      'rate': 4.4,
-      'address': '890 Birch St, City',
-      'imageUrl': 'assets/images/lotfy.jpg',
-      'specialization': 'Dentist',
-    },
-    'Fawzy':{
-      'name': 'Dr. Ahmed Fawzy',
-      'rate': 4.2,
-      'address': '432 Oak St, Town',
-      'imageUrl': 'assets/images/ahmed fawzy.jpg',
-      'specialization': 'Dermatologist',
-    },
-
-
-
-  };
-
-
-
+  // Map<String,Map<String,dynamic>> doctorsMap={
+  //   'Hanafy':{
+  //     'name': 'Dr. Mahmood Hanafy',
+  //     'rate': 4.5,
+  //     'address': '123 Main St, City',
+  //     'imageUrl': 'assets/images/hanafy.jpg',
+  //     'specialization': 'Audiologist',},
+  //   'Ahmed':{
+  //     'name': 'Dr. Hadeer Ahmed',
+  //     'rate': 4.8,
+  //     'address': '456 Elm St, Town',
+  //     'imageUrl': 'assets/images/hadeer.jpg',
+  //     'specialization': 'Allergist',
+  //   },
+  //   'Mandor':{
+  //     'name': 'Dr. Mohamed Mandor',
+  //     'rate': 4.3,
+  //     'address': '789 Oak St, Village',
+  //     'imageUrl': 'assets/images/mondor.jpg',
+  //     'specialization': 'Andrologist',
+  //   },
+  //   'Said':{
+  //     'name': 'Dr. Mohamed Said',
+  //     'rate': 4.7,
+  //     'address': '101 Pine St, Town',
+  //     'imageUrl': 'assets/images/mohamed said.jpg',
+  //     'specialization': 'Anesthesiologist',
+  //   },
+  //   'Tantawy':{
+  //     'name': 'Dr. Eman Tantawy',
+  //     'rate': 4.6,
+  //     'address': '234 Cedar St, City',
+  //     'imageUrl': 'assets/images/eman.jpg',
+  //     'specialization': 'Cardiologist',
+  //   },
+  //   'Hussein':{
+  //     'name': 'Dr. Mohamed Hussein',
+  //     'rate': 4.9,
+  //     'address': '567 Maple St, Village',
+  //     'imageUrl': 'assets/images/hussien.jpg',
+  //     'specialization': 'Neurologist',
+  //   },
+  //   'Lotfy':{
+  //     'name': 'Dr. Ahmed Lotfy',
+  //     'rate': 4.4,
+  //     'address': '890 Birch St, City',
+  //     'imageUrl': 'assets/images/lotfy.jpg',
+  //     'specialization': 'Dentist',
+  //   },
+  //   'Fawzy':{
+  //     'name': 'Dr. Ahmed Fawzy',
+  //     'rate': 4.2,
+  //     'address': '432 Oak St, Town',
+  //     'imageUrl': 'assets/images/ahmed fawzy.jpg',
+  //     'specialization': 'Dermatologist',
+  //   },
+  // };
 
   Stream<List<MyUser>> _getDoctors() {
-    return _firestore.collection('users')
+    return _firestore
+        .collection('users')
         .where('userType', isEqualTo: 'Doctor')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => MyUser.fromDocument(doc))
-        .toList());
+        .map((snapshot) => snapshot.docs.map((doc) => MyUser.fromDocument(doc)).toList());
   }
+
   @override
   Widget build(BuildContext context) {
-    return
-      StreamBuilder<List<MyUser>>(
-        stream: _getDoctors(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          final doctors = snapshot.data!;
-          // for (var entry in doctors) {
-          //  log("name:"+entry.lastName.toString());
-          //  // log("entry"+entry.toString());
-          // }
-          return ListView.builder(
-            itemCount: doctors.length,
-            itemBuilder: (context, index) {
-              final doctor = doctors[index];
-              // log("doctor.lastName"+doctor.lastName);
-                String docName = doctorsMap[doctor.lastName]!['name']!;
-                // log("docName");
-                // log(docName.toString());
-                double docRate = doctorsMap[doctor.lastName]!['rate']!;
-                String docAddress = doctorsMap[doctor.lastName]!['address']!;
-                String docImage = doctorsMap[doctor.lastName]!['imageUrl']!;
-                String docspecialization = doctorsMap[doctor.lastName]!['specialization']!;
-                return DoctorCard(address: docAddress,
-                  imageUrl: docImage,
-                  name: docName,
-                  rate: docRate,
-                  specialization: docspecialization,
-                docId:doctor.id,
-                );
+    return StreamBuilder<List<MyUser>>(
+      stream: _getDoctors(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        final doctors = snapshot.data!;
+        // for (var entry in doctors) {
+        //  log("name:"+entry.lastName.toString());
+        //  // log("entry"+entry.toString());
+        // }
+        return ListView.builder(
+          itemCount: doctors.length,
+          itemBuilder: (context, index) {
+            final doctor = doctors[index];
+            // log("doctor.lastName"+doctor.lastName);
+            // String docName = doctorsMap[]!['name']!;
+            // // log("docName");
+            // // log(docName.toString());
+            // double docRate = doctorsMap[doctor.lastName]!['rate']!;
+            // String docAddress = doctorsMap[doctor.lastName]!['address']!;
+            // String docImage = doctorsMap[doctor.lastName]!['imageUrl']!;
+            // String docspecialization = doctorsMap[doctor.lastName]!['specialization']!;
 
-            },
-          );
-        },
-      );
+            return DoctorCard(
+              address: doctor.address.toString(),
+              imageUrl: doctor.imageUrl.toString(),
+              name: "${doctor.firstName.toString()} ${doctor.lastName.toString()} ",
+              rate: double.parse(doctor.rate.toString()),
+              total_rate: double.parse(doctor.countRate.toString()),
+              specialization: doctor.specialization.toString(),
+              // doctor.specialization.toString(),
+              docId: doctor.id,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RoomScreen(
+                      doctor: doctor,
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }
-
-
 
 class DoctorCard extends StatefulWidget {
   // final Doctor doctor;
   final String name;
-  final double rate;
+  double rate;
+  final double total_rate;
   final String address;
   final String imageUrl;
   final String specialization;
   final String docId;
-
-  const DoctorCard({super.key,required this.name,required this.rate,required this.address,required this.imageUrl,required this.specialization, required this.docId});
+  void Function()? onTap;
+  DoctorCard({
+    super.key,
+    required this.name,
+    required this.rate,
+    required this.total_rate,
+    required this.address,
+    required this.imageUrl,
+    required this.specialization,
+    required this.docId,
+    required this.onTap,
+  });
 
   @override
   State<DoctorCard> createState() => _DoctorCardState();
@@ -274,22 +284,46 @@ class _DoctorCardState extends State<DoctorCard> {
   final ChatService _chatService = ChatService();
   @override
   Widget build(BuildContext context) {
+    // double rate = double.parse(widget.docId);
+    // double total_rate = widget.total_rate * 5;
+    // double avareg_rate = (rate / total_rate) * 5;
+
+    if (widget.rate != 0) {
+      double avareg_rate = ((widget.rate) / (widget.total_rate * 5)) * 5;
+      widget.rate = avareg_rate;
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
       child: Card(
         elevation: 3,
         margin: const EdgeInsets.all(8.0),
         child: GestureDetector(
-          onTap: () async{
-            String chatId = await _chatService.getOrCreateChat(widget.docId);
-            // log("here"+widget.name);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                builder: (context) => ChatScreen(chatId: chatId, recipientId: widget.docId,),
-            ),
-            );
-          },
+          onTap: widget.onTap,
+
+          //  () async {
+          //   String chatId = await _chatService.getOrCreateChat(widget.docId);
+
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => RoomScreen(
+          //         chatId: chatId,
+          //         recipientId: widget.docId,
+          //       ),
+          //     ),
+          //   );
+
+          //   // Navigator.push(
+          //   //   context,
+          //   //   MaterialPageRoute(
+          //   //     builder: (context) => ChatScreen(
+          //   //       chatId: chatId,
+          //   //       recipientId: widget.docId,
+          //   //     ),
+          //   //   ),
+          //   // );
+          // },
           child: ListTile(
             leading: ClipOval(
                 child: Image(
@@ -315,7 +349,9 @@ class _DoctorCardState extends State<DoctorCard> {
                       Navigator.push(
                         context,
                         CustomPageRoute(
-                          child: const ReviewScreen(),
+                          child: ReviewScreen(
+                            docId: widget.docId.toString(),
+                          ),
                         ),
                       );
                     },
@@ -342,6 +378,10 @@ class _DoctorCardState extends State<DoctorCard> {
                   'Rate: ${widget.rate.toStringAsFixed(1)}',
                   style: midTextStyle(context, grey),
                 ),
+                // Text(
+                //   'Rate: ${widget.total_rate.toStringAsFixed(1)}',
+                //   style: midTextStyle(context, grey),
+                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Text(

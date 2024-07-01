@@ -5,9 +5,7 @@ import '../model/chat.dart';
 import '../model/my_user.dart';
 import 'chat_screen.dart';
 
-
 class DoctorChatListScreen extends StatefulWidget {
-
   const DoctorChatListScreen({Key? key}) : super(key: key);
   @override
   State<DoctorChatListScreen> createState() => _DoctorChatListScreenState();
@@ -27,14 +25,13 @@ class _DoctorChatListScreenState extends State<DoctorChatListScreen> {
   }
 
   Stream<List<Chat>> _getChats() {
-    return _firestore.collection('chats')
+    return _firestore
+        .collection('chats')
         .where('participants', arrayContains: _user!.uid)
         .orderBy('lastMessageTimestamp', descending: true) // Order by timestamp descending
         .snapshots()
-        .map((snapshot) =>
-        snapshot.docs.map((doc) => Chat.fromDocument(doc)).toList());
+        .map((snapshot) => snapshot.docs.map((doc) => Chat.fromDocument(doc)).toList());
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,33 +48,31 @@ class _DoctorChatListScreenState extends State<DoctorChatListScreen> {
             itemCount: chats.length,
             itemBuilder: (context, index) {
               final chat = chats[index];
-              final otherParticipant = chat.participants.firstWhere((
-                  uid) => uid != _user!.uid);
+              final otherParticipant = chat.participants.firstWhere((uid) => uid != _user!.uid);
 
               return FutureBuilder<DocumentSnapshot>(
-                future: _firestore.collection('users')
-                    .doc(otherParticipant)
-                    .get(),
+                future: _firestore.collection('users').doc(otherParticipant).get(),
                 builder: (context, userSnapshot) {
                   if (!userSnapshot.hasData) {
                     return Container();
                   }
-                  final user = MyUser.fromDocument(userSnapshot.data!);
-                  return Card(
-                    child: ListTile(
-                      title: Text(user.userName),
-                      subtitle: Text(chat.lastMessage),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(
-                                chatId: chat.id, recipientId: user.id),
-                          ),
-                        );
-                      },
-                    ),
-                  );
+                  return Container();
+                  //final user;
+                  // final user = MyUser.fromDocument(userSnapshot.data!);
+                  // return Card(
+                  //   child: ListTile(
+                  //     title: Text(user.userName),
+                  //     subtitle: Text(chat.lastMessage),
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) => ChatScreen(chatId: chat.id, recipientId: user.id),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // );
                 },
               );
             },
