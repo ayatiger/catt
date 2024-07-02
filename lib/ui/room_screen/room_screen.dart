@@ -20,6 +20,8 @@ class RoomScreen extends StatefulWidget {
 class _RoomScreenState extends State<RoomScreen> {
   @override
   Widget build(BuildContext context) {
+    double avareg_rate = (double.parse(widget.doctor.rate) / double.parse(widget.doctor.countRate * 5)) * 5;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Doctor Profile'),
@@ -56,13 +58,13 @@ class _RoomScreenState extends State<RoomScreen> {
             SizedBox(
               height: 10,
             ),
-            Text(
-              "rate",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(widget.doctor.rate.toString()),
+            // Text(
+            //   "rate",
+            //   style: TextStyle(
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            // Text(avareg_rate.toString()),
             SizedBox(
               height: 10,
             ),
@@ -94,7 +96,7 @@ class _RoomScreenState extends State<RoomScreen> {
                       final ChatService _chatService = ChatService();
 
                       String chatId = await _chatService.getOrCreateChat(widget.doctor.id);
-
+                      print("chatId ${chatId.toString()} doctorid ${widget.doctor.id}");
                       Navigator.push(
                         context,
                         MaterialPageRoute(

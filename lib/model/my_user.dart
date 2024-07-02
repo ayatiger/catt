@@ -35,7 +35,7 @@ class MyUser {
           firstName: json['first_name'] as String,
           lastName: json['last_name'] as String,
           userName: json['user_name'] as String,
-          imageUrl: json['image_url'] as String,
+          imageUrl: json['image_url'].toString() as String,
           email: json['email'] as String,
           isDoc: json['IsDoc'] as bool, // Removed extra colon
           userType: json['userType'] as String,
@@ -58,11 +58,13 @@ class MyUser {
       'count_rate': countRate,
       'address': address,
       'specialization': specialization,
-      'imageUrl': imageUrl,
+      'image_url': imageUrl,
     };
   }
 
-  factory MyUser.fromDocument(DocumentSnapshot<Map<String, dynamic>> doc) {
+  factory MyUser.fromDocument(DocumentSnapshot doc) {
+    final docData = doc.data() as Map<String, dynamic>;
+
     return MyUser(
       id: doc['id'],
       firstName: doc['first_name'],
@@ -73,10 +75,9 @@ class MyUser {
       imageUrl: doc['image_url'],
       userType: doc['userType'],
       rate: doc['rate'] == "" ? "0" : doc['rate'],
-      countRate: (doc.data()?.containsKey("count_rate") ?? false) ? doc['count_rate'] : "0",
-      address: (doc.data()?.containsKey("address") ?? false) ? doc['address'] : "No Address",
-      specialization:
-          (doc.data()?.containsKey("specialization") ?? false) ? doc['specialization'] : "No Specialization",
+      countRate: (docData.containsKey("count_rate") ?? false) ? doc['count_rate'] : "0",
+      address: (docData.containsKey("address") ?? false) ? doc['address'] : "No Address",
+      specialization: (docData.containsKey("specialization") ?? false) ? doc['specialization'] : "No Specialization",
     );
   }
 

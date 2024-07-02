@@ -125,8 +125,8 @@ class _LoginScreenState extends State<LoginScreen> implements LoginNavigator {
   void validateForm() {
     //if (formkey.currentState?.validate() == true) {
     CacheHelper.saveData(key: 'email', value: emailController.text);
-    // CacheHelper.saveData(key: 'type', value: type);
-    // CacheHelper.saveData(key: 'name', value: name);
+   CacheHelper.saveData(key: 'type', value: type);
+    CacheHelper.saveData(key: 'name', value: name);
     // email = "admin@admin.com";
     // password = "123456789";
 

@@ -77,12 +77,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Message {
+  int id;
   final String senderId;
   final String text;
   final DateTime timestamp;
   final String imageUrl;
 
   Message({
+    required this.id,
     required this.senderId,
     required this.text,
     required this.timestamp,
@@ -91,6 +93,7 @@ class Message {
 
   factory Message.fromDocument(DocumentSnapshot doc) {
     return Message(
+      id: doc['id'],
       senderId: doc['senderId'],
       text: doc['text'],
       timestamp: (doc['timestamp'] as Timestamp).toDate(),
@@ -100,6 +103,7 @@ class Message {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'senderId': senderId,
       'text': text,
       'timestamp': timestamp,

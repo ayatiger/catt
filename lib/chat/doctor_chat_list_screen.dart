@@ -1,3 +1,4 @@
+import 'package:chat/ui/login/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +28,7 @@ class _DoctorChatListScreenState extends State<DoctorChatListScreen> {
   Stream<List<Chat>> _getChats() {
     return _firestore
         .collection('chats')
-        .where('participants', arrayContains: _user!.uid)
+        .where('participants', arrayContains: userObj!.id.toString())
         .orderBy('lastMessageTimestamp', descending: true) // Order by timestamp descending
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) => Chat.fromDocument(doc)).toList());
@@ -56,23 +57,23 @@ class _DoctorChatListScreenState extends State<DoctorChatListScreen> {
                   if (!userSnapshot.hasData) {
                     return Container();
                   }
-                  return Container();
+                 // return Container();
                   //final user;
-                  // final user = MyUser.fromDocument(userSnapshot.data!);
-                  // return Card(
-                  //   child: ListTile(
-                  //     title: Text(user.userName),
-                  //     subtitle: Text(chat.lastMessage),
-                  //     onTap: () {
-                  //       Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //           builder: (context) => ChatScreen(chatId: chat.id, recipientId: user.id),
-                  //         ),
-                  //       );
-                  //     },
-                  //   ),
-                  // );
+                  final user = MyUser.fromDocument(userSnapshot.data!  );
+                  return Card(
+                    child: ListTile(
+                      title: Text(user.userName),
+                      subtitle: Text(chat.lastMessage),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(chatId: chat.id, recipientId: user.id),
+                          ),
+                        );
+                      },
+                    ),
+                  );
                 },
               );
             },

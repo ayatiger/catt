@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat/constants/components.dart';
 import 'package:chat/constants/transitions.dart';
 import 'package:chat/ui/home/review_screen.dart';
+import 'package:chat/ui/login/login_view_model.dart';
 import 'package:chat/ui/room_screen/room_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -117,12 +118,10 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('HP App'),
-      // ),
-      body: _selectedIndex == 0 ? HomeScreenContent() : const DoctorChatListScreen(),
-    );
+    return Scaffold(body: (userObj!.userType.toString() == "Doctor") ? DoctorChatListScreen() : HomeScreenContent()
+
+        // (userObj!.userType.toString() == "Doctor") ?  :,
+        );
   }
 }
 
@@ -203,53 +202,48 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<MyUser>>(
-      stream: _getDoctors(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final doctors = snapshot.data!;
-        // for (var entry in doctors) {
-        //  log("name:"+entry.lastName.toString());
-        //  // log("entry"+entry.toString());
-        // }
-        return ListView.builder(
-          itemCount: doctors.length,
-          itemBuilder: (context, index) {
-            final doctor = doctors[index];
-            // log("doctor.lastName"+doctor.lastName);
-            // String docName = doctorsMap[]!['name']!;
-            // // log("docName");
-            // // log(docName.toString());
-            // double docRate = doctorsMap[doctor.lastName]!['rate']!;
-            // String docAddress = doctorsMap[doctor.lastName]!['address']!;
-            // String docImage = doctorsMap[doctor.lastName]!['imageUrl']!;
-            // String docspecialization = doctorsMap[doctor.lastName]!['specialization']!;
+    return Scaffold(
+      appBar: AppBar(title: Text("Doctor List")),
+      body: StreamBuilder<List<MyUser>>(
+        stream: _getDoctors(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final doctors = snapshot.data!;
+          // for (var entry in doctors) {
+          //  log("name:"+entry.lastName.toString());
+          //  // log("entry"+entry.toString());
+          // }
+          return ListView.builder(
+            itemCount: doctors.length,
+            itemBuilder: (context, index) {
+              final doctor = doctors[index];
 
-            return DoctorCard(
-              address: doctor.address.toString(),
-              imageUrl: doctor.imageUrl.toString(),
-              name: "${doctor.firstName.toString()} ${doctor.lastName.toString()} ",
-              rate: double.parse(doctor.rate.toString()),
-              total_rate: double.parse(doctor.countRate.toString()),
-              specialization: doctor.specialization.toString(),
-              // doctor.specialization.toString(),
-              docId: doctor.id,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RoomScreen(
-                      doctor: doctor,
+              return DoctorCard(
+                address: doctor.address.toString(),
+                imageUrl: doctor.imageUrl.toString(),
+                name: "${doctor.firstName.toString()} ${doctor.lastName.toString()} ",
+                rate: double.parse(doctor.rate.toString()),
+                total_rate: double.parse(doctor.countRate.toString()),
+                specialization: doctor.specialization.toString(),
+                // doctor.specialization.toString(),
+                docId: doctor.id,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RoomScreen(
+                        doctor: doctor,
+                      ),
                     ),
-                  ),
-                );
-              },
-            );
-          },
-        );
-      },
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -401,27 +395,3 @@ class _DoctorCardState extends State<DoctorCard> {
     );
   }
 }
-
-// class ContactScreen extends StatelessWidget {
-//   const ContactScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // Replace this with the content of your Contact screen
-//     return const Center(
-//       child: Text('Contact Screen Content'),
-//     );
-//   }
-// }
-//
-// class ProfileScreen extends StatelessWidget {
-//   const ProfileScreen({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // Replace this with the content of your Profile screen
-//     return const Center(
-//       child: Text('Profile Screen Content'),
-//     );
-//   }
-// }

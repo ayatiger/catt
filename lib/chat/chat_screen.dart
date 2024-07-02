@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,7 +34,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> _sendMessage(String text) async {
     if (_user != null && text.isNotEmpty) {
+      QuerySnapshot messages = await _firestore.collection('chats').doc(widget.chatId).collection('messages').get();
+
       final message = Message(
+        id: messages.size + 1,
         senderId: _user!.uid,
         text: text,
         timestamp: DateTime.now(),
@@ -49,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Stream<List<Message>> _getMessages() {
-    return _messagesRef.orderBy('timestamp').snapshots().map(
+    return _messagesRef.orderBy('id').snapshots().map(
           (snapshot) => snapshot.docs.map((doc) => Message.fromDocument(doc)).toList(),
         );
   }
@@ -60,8 +65,42 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Text(
           'Chat',
-          style: TextStyle(fontFamily: 'Roboto', fontSize: 24),
+          style: TextStyle(
+            fontFamily: 'Roboto',
+            fontSize: 24,
+          ),
         ),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              final collectionRef =
+                  FirebaseFirestore.instance.collection('chats').doc(widget.chatId).collection('messages');
+
+              // Get all documents in the collection
+              QuerySnapshot querySnapshot = await collectionRef.get();
+
+              // Iterate over each document and delete it
+              for (QueryDocumentSnapshot docSnapshot in querySnapshot.docs) {
+                await docSnapshot.reference.delete();
+              }
+
+              print("All documents in the collection have been deleted.");
+
+              // _messagesRef.orderBy('id').snapshots().map(
+              //   (snapshot) {
+              //     print("snapshot object");
+              //     print(snapshot.docs);
+              //   },
+              // );
+              // await FirebaseFirestore.instance.recursiveDelete(_firestore.collection('chats').doc(widget.chatId).collection("messages"));
+
+              //await _firestore.collection('chats').doc(widget.chatId).collection("messages").listDocuments();
+            },
+            icon: Icon(
+              Icons.delete,
+            ),
+          )
+        ],
         backgroundColor: Colors.teal,
       ),
       body: Column(

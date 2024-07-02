@@ -119,194 +119,228 @@ class _ProfileWidgetState extends State<ProfileWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Profile"),
+      ),
       body: BlocConsumer<AppCubit, AppStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return SingleChildScrollView(
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 15,
-                            offset: const Offset(0, 8),
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (userObj!.userType.toString() == "Doctor") Image.asset("${userObj!.imageUrl.toString()}"),
+                          // Text("${userObj!.id.toString()}"),
+                          Text(
+                            "First Name",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          Text("${userObj!.firstName.toString()}"),
+
+                          Text(
+                            "Last Name",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text("${userObj!.lastName.toString()}"),
+
+                          Text(
+                            "Email",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text("${userObj!.email.toString()}"),
+
+                          Text(
+                            "user Type",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          Text("${userObj!.userType.toString()}"),
+                          if (userObj!.userType.toString() == "Doctor") Text("${userObj!.rate.toString()}"),
+                          if (userObj!.userType.toString() == "Doctor") Text("${userObj!.address.toString()}"),
+                          Text(
+                            "Note",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text("${userObj!.specialization.toString()}"),
+
+                          // Text("${userObj!.firstName.toString()}"),
+
+                          // Text("${firebaseUser!.displayName.toString()}"),
+
+                          // Row(
+                          //   children: [
+                          //     // if (image != null)
+                          //     //   Align(
+                          //     //     alignment: Alignment.center,
+                          //     //     child: SizedBox(
+                          //     //       width: 120,
+                          //     //       height: 120,
+                          //     //       child: Padding(
+                          //     //         padding: const EdgeInsets.all(2.2),
+                          //     //         child: Container(
+                          //     //           decoration: const BoxDecoration(
+                          //     //             shape: BoxShape.circle,
+                          //     //           ),
+                          //     //           child: ClipOval(
+                          //     //             child: Image.file(
+                          //     //               image!,
+                          //     //               fit: BoxFit.cover,
+                          //     //             ),
+                          //     //           ),
+                          //     //         ),
+                          //     //       ),
+                          //     //     ),
+                          //     //   )
+                          //     // else
+                          //     //   Align(
+                          //     //     alignment: Alignment.center,
+                          //     //     child: SizedBox(
+                          //     //       width: 120,
+                          //     //       height: 120,
+                          //     //       child: Padding(
+                          //     //         padding: const EdgeInsets.all(2.2),
+                          //     //         child: Container(
+                          //     //           height: 120,
+                          //     //           decoration: const BoxDecoration(
+                          //     //             shape: BoxShape.circle,
+                          //     //             color: Color.fromRGBO(0, 0, 0, 0.2),
+                          //     //           ),
+                          //     //         ),
+                          //     //       ),
+                          //     //     ),
+                          //     //   ),
+                          //     // const SizedBox(width: 20),
+
+                          //     // Align(
+                          //     //   alignment: Alignment.center,
+                          //     //   child: InkWell(
+                          //     //     onTap: () {
+                          //     //       buildCameraDialog(context);
+                          //     //     },
+                          //     //     child: Text(
+                          //     //       'Change Photo',
+                          //     //       style: mainTextStyle(
+                          //     //         context,
+                          //     //         color: black,
+                          //     //       ),
+                          //     //       textAlign: TextAlign.center,
+                          //     //     ),
+                          //     //   ),
+                          //     // ),
+                          //   ],
+                          // ),
+
+                          // const SizedBox(height: 20),
+                          // Row(
+                          //   crossAxisAlignment: CrossAxisAlignment.center,
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Text(
+                          //       Provider.of<UserProvider>(context, listen: false).user!.userName.toString(),
+                          //       style: mainTextStyle(context),
+                          //     ),
+                          //     const Spacer(),
+                          //     Text(
+                          //       Provider.of<UserProvider>(context, listen: false).user!.userType.toString(),
+                          //       style: mainTextStyle(context, color: defaultColor),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(height: 20),
+                          // Text(
+                          //   CacheHelper.getData(key: 'email') ?? 'aya@gmail.com',
+                          //   style: mainTextStyle(context),
+                          // ),
+                          // const SizedBox(height: 20),
                         ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (userObj!.userType.toString() == "Doctor")
-                              Image.asset("${userObj!.imageUrl.toString()}"),
+                    ),
+                  ),
+                  //CacheHelper.getData(key: 'disease') == "patient"? const SizedBox(height: 30):Text(''),
+                  // Provider.of<UserProvider>(context, listen: false).user!.userType.toString() == 'Doctor'
+                  //     ? Text(
+                  //         '',
+                  //         style: mainTextStyle(context),
+                  //       )
+                  //     : Text(
+                  //         CacheHelper.getData(key: 'disease') ?? '',
+                  //         style: mainTextStyle(context),
+                  //       ),
 
-                            Text("${userObj!.firstName.toString()}"),
-                            Text("${userObj!.lastName.toString()}"),
-                            Text("${userObj!.email.toString()}"),
-                            Text("${userObj!.userType.toString()}"),
-                            if (userObj!.userType.toString() == "Doctor") Text("${userObj!.rate.toString()}"),
-                            if (userObj!.userType.toString() == "Doctor") Text("${userObj!.address.toString()}"),
-
-                            Text("${userObj!.specialization.toString()}"),
-
-                            // Text("${userObj!.firstName.toString()}"),
-
-                            // Text("${firebaseUser!.displayName.toString()}"),
-
-                            // Row(
-                            //   children: [
-                            //     // if (image != null)
-                            //     //   Align(
-                            //     //     alignment: Alignment.center,
-                            //     //     child: SizedBox(
-                            //     //       width: 120,
-                            //     //       height: 120,
-                            //     //       child: Padding(
-                            //     //         padding: const EdgeInsets.all(2.2),
-                            //     //         child: Container(
-                            //     //           decoration: const BoxDecoration(
-                            //     //             shape: BoxShape.circle,
-                            //     //           ),
-                            //     //           child: ClipOval(
-                            //     //             child: Image.file(
-                            //     //               image!,
-                            //     //               fit: BoxFit.cover,
-                            //     //             ),
-                            //     //           ),
-                            //     //         ),
-                            //     //       ),
-                            //     //     ),
-                            //     //   )
-                            //     // else
-                            //     //   Align(
-                            //     //     alignment: Alignment.center,
-                            //     //     child: SizedBox(
-                            //     //       width: 120,
-                            //     //       height: 120,
-                            //     //       child: Padding(
-                            //     //         padding: const EdgeInsets.all(2.2),
-                            //     //         child: Container(
-                            //     //           height: 120,
-                            //     //           decoration: const BoxDecoration(
-                            //     //             shape: BoxShape.circle,
-                            //     //             color: Color.fromRGBO(0, 0, 0, 0.2),
-                            //     //           ),
-                            //     //         ),
-                            //     //       ),
-                            //     //     ),
-                            //     //   ),
-                            //     // const SizedBox(width: 20),
-
-                            //     // Align(
-                            //     //   alignment: Alignment.center,
-                            //     //   child: InkWell(
-                            //     //     onTap: () {
-                            //     //       buildCameraDialog(context);
-                            //     //     },
-                            //     //     child: Text(
-                            //     //       'Change Photo',
-                            //     //       style: mainTextStyle(
-                            //     //         context,
-                            //     //         color: black,
-                            //     //       ),
-                            //     //       textAlign: TextAlign.center,
-                            //     //     ),
-                            //     //   ),
-                            //     // ),
-                            //   ],
-                            // ),
-
-                            // const SizedBox(height: 20),
-                            // Row(
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   mainAxisAlignment: MainAxisAlignment.center,
-                            //   children: [
-                            //     Text(
-                            //       Provider.of<UserProvider>(context, listen: false).user!.userName.toString(),
-                            //       style: mainTextStyle(context),
-                            //     ),
-                            //     const Spacer(),
-                            //     Text(
-                            //       Provider.of<UserProvider>(context, listen: false).user!.userType.toString(),
-                            //       style: mainTextStyle(context, color: defaultColor),
-                            //     ),
-                            //   ],
-                            // ),
-                            // const SizedBox(height: 20),
-                            // Text(
-                            //   CacheHelper.getData(key: 'email') ?? 'aya@gmail.com',
-                            //   style: mainTextStyle(context),
-                            // ),
-                            // const SizedBox(height: 20),
-                          ],
+                  const SizedBox(height: 30),
+                  // Text(CacheHelper.getData(key: 'type')),
+                  // CacheHelper.getData(key: 'type')=='patient'?TFF(
+                  //   action: TextInputAction.send,
+                  //   type: TextInputType.text,
+                  //   isPrefix: false,
+                  //   underlineBorder: false,
+                  //   label: "Disease",
+                  //   hint: "enter your disease",
+                  // ):const SizedBox.shrink(),
+                  const SizedBox(height: 50),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        CustomPageRoute(
+                          child: LoginScreen(),
                         ),
+                      );
+                      CacheHelper.saveData(key: 'isLogout', value: true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: defaultColor,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      minimumSize: Size(
+                        double.infinity,
+                        screenHeight(context, .053),
                       ),
                     ),
-                    //CacheHelper.getData(key: 'disease') == "patient"? const SizedBox(height: 30):Text(''),
-                    // Provider.of<UserProvider>(context, listen: false).user!.userType.toString() == 'Doctor'
-                    //     ? Text(
-                    //         '',
-                    //         style: mainTextStyle(context),
-                    //       )
-                    //     : Text(
-                    //         CacheHelper.getData(key: 'disease') ?? '',
-                    //         style: mainTextStyle(context),
-                    //       ),
-
-                    const SizedBox(height: 30),
-                    // Text(CacheHelper.getData(key: 'type')),
-                    // CacheHelper.getData(key: 'type')=='patient'?TFF(
-                    //   action: TextInputAction.send,
-                    //   type: TextInputType.text,
-                    //   isPrefix: false,
-                    //   underlineBorder: false,
-                    //   label: "Disease",
-                    //   hint: "enter your disease",
-                    // ):const SizedBox.shrink(),
-                    const SizedBox(height: 50),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          CustomPageRoute(
-                            child: LoginScreen(),
-                          ),
-                        );
-                        CacheHelper.saveData(key: 'isLogout', value: true);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: defaultColor,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        minimumSize: Size(
-                          double.infinity,
-                          screenHeight(context, .053),
-                        ),
-                      ),
-                      child: const Text(
-                        'Logout',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                    child: const Text(
+                      'Logout',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           );
